@@ -29,12 +29,12 @@
   --radius:28px;--shadow:0 24px 70px rgba(0,0,0,.34);--navH:0px;
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
 }
-*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;color:var(--text);direction:rtl;background:radial-gradient(circle at 85% -10%, rgba(118,185,0,.24), transparent 34%),radial-gradient(circle at 8% 12%, rgba(69,210,90,.13), transparent 27%),linear-gradient(180deg,#030403 0%,#071007 48%,#030403 100%);overflow-x:hidden} a{color:inherit;text-decoration:none} button,input,select{font:inherit} button{cursor:pointer} .wrap{width:min(100%,1320px);margin:0 auto;padding:0 18px} .page{padding:18px 0 58px}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;color:var(--text);direction:rtl;background:radial-gradient(circle at 85% -10%, rgba(118,185,0,.24), transparent 34%),radial-gradient(circle at 8% 12%, rgba(69,210,90,.13), transparent 27%),linear-gradient(180deg,#030403 0%,#071007 48%,#030403 100%);overflow-x:hidden} a{color:inherit;text-decoration:none} button,input,select{font:inherit} button{cursor:pointer} .wrap{width:min(100%,1320px);margin:0 auto;padding:0 18px} .page{padding:0 0 58px}
 .topbar{position:sticky;top:0;z-index:80;background:rgba(4,7,4,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);box-shadow:0 18px 44px rgba(0,0,0,.28)}
 .topbar .wrap{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding-top:11px;padding-bottom:11px} .brand{display:flex;align-items:center;gap:11px;min-width:max-content} .logo{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(118,185,0,.28),rgba(118,185,0,.06));border:1px solid rgba(157,242,42,.35);box-shadow:0 0 0 6px rgba(118,185,0,.08),inset 0 0 24px rgba(157,242,42,.15)} .logo svg{width:25px;height:25px;stroke:var(--green2);fill:none;stroke-width:1.8} .brand-title{display:flex;flex-direction:column;line-height:1.15} .brand-title strong{font-size:18px} .brand-title span{font-size:11px;color:var(--muted);margin-top:4px}
 .top-search{position:relative;max-width:560px;margin-inline:auto;width:100%} .top-search input{width:100%;height:44px;border-radius:999px;border:1px solid var(--line2);background:rgba(255,255,255,.055);color:var(--text);outline:none;padding:0 46px 0 16px;text-align:right} .top-search input:focus{border-color:rgba(157,242,42,.55);box-shadow:0 0 0 5px rgba(118,185,0,.11)} .search-ico{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--green2)} .top-actions{display:flex;gap:8px;align-items:center;min-width:max-content}
 .btn{border:1px solid var(--line);background:rgba(118,185,0,.12);color:var(--text);border-radius:16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 15px;font-weight:900;min-height:42px;transition:.18s ease;box-shadow:0 14px 28px rgba(0,0,0,.20)} .btn:hover{transform:translateY(-1px);background:rgba(118,185,0,.20);border-color:rgba(157,242,42,.48)} .btn-primary{background:linear-gradient(135deg,var(--green),var(--green3));border-color:rgba(157,242,42,.55);color:#071107;box-shadow:0 18px 38px rgba(118,185,0,.24)} .btn-ghost{background:rgba(255,255,255,.045);border-color:var(--line2);color:#edf8e8} .btn-small{min-height:34px;padding:8px 11px;border-radius:12px;font-size:12px} .btn-wide{width:100%}
-.hero{position:relative;overflow:hidden;border:1px solid rgba(157,242,42,.22);border-radius:36px;background:linear-gradient(135deg,rgba(9,15,9,.95),rgba(4,7,4,.92)),radial-gradient(circle at 18% 22%,rgba(118,185,0,.36),transparent 24%),repeating-linear-gradient(135deg,rgba(157,242,42,.11) 0 1px,transparent 1px 18px);box-shadow:var(--shadow);min-height:410px} .hero:before{content:"";position:absolute;inset:auto -8% -42% auto;width:540px;height:540px;border-radius:50%;background:repeating-radial-gradient(circle,rgba(157,242,42,.12) 0 1px,transparent 1px 18px);border:1px solid rgba(157,242,42,.13)} .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:stretch;padding:32px} .eyebrow{display:inline-flex;gap:8px;align-items:center;color:var(--green2);background:rgba(118,185,0,.13);border:1px solid var(--line);border-radius:999px;padding:9px 13px;font-weight:1000;font-size:13px} h1,.hero-title{font-size:clamp(38px,6vw,72px);line-height:1.05;margin:18px 0 14px;letter-spacing:-1.2px}.hero-title{display:block;font-weight:1000} .hero p{color:#d7e5d1;line-height:1.9;font-size:17px;margin:0;max-width:780px} .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px} .welcome{margin-top:18px;display:inline-flex;align-items:center;gap:9px;padding:12px 16px;border-radius:999px;background:rgba(255,255,255,.075);border:1px solid var(--line2);color:#fff;font-weight:900}
+.hero{position:relative;overflow:hidden;border:1px solid rgba(157,242,42,.22);border-radius:36px;background:linear-gradient(135deg,rgba(9,15,9,.95),rgba(4,7,4,.92)),radial-gradient(circle at 18% 22%,rgba(118,185,0,.36),transparent 24%),repeating-linear-gradient(135deg,rgba(157,242,42,.11) 0 1px,transparent 1px 18px);box-shadow:var(--shadow);min-height:410px} .hero:before{content:"";position:absolute;inset:auto -8% -42% auto;width:540px;height:540px;border-radius:50%;background:repeating-radial-gradient(circle,rgba(157,242,42,.12) 0 1px,transparent 1px 18px);border:1px solid rgba(157,242,42,.13)} .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:22px;align-items:stretch;padding:44px 42px} .eyebrow{display:inline-flex;gap:8px;align-items:center;color:var(--green2);background:rgba(118,185,0,.13);border:1px solid var(--line);border-radius:999px;padding:9px 13px;font-weight:1000;font-size:13px} h1,.hero-title{font-size:clamp(38px,6vw,72px);line-height:1.05;margin:18px 0 14px;letter-spacing:-1.2px}.hero-title{display:block;font-weight:1000} .hero p{color:#d7e5d1;line-height:1.9;font-size:17px;margin:0;max-width:780px} .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px} .welcome{margin-top:18px;display:inline-flex;align-items:center;gap:9px;padding:12px 16px;border-radius:999px;background:rgba(255,255,255,.075);border:1px solid var(--line2);color:#fff;font-weight:900}
 .start-panel{background:linear-gradient(180deg,rgba(21,31,21,.88),rgba(9,13,9,.88));border:1px solid rgba(157,242,42,.18);border-radius:30px;padding:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 22px 54px rgba(0,0,0,.28)} .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px} .panel-head h2{font-size:22px;margin:0} .panel-head span{font-size:12px;color:var(--muted)} .journey{display:grid;gap:10px} .journey button{border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.045);color:#eaf6e4;border-radius:18px;padding:12px 13px;text-align:right;display:flex;gap:10px;align-items:center;justify-content:space-between;transition:.18s ease} .journey button:hover{background:rgba(118,185,0,.14);border-color:var(--line)} .journey b{font-size:14px} .journey small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0} .stat{background:linear-gradient(180deg,rgba(18,27,18,.9),rgba(9,13,9,.95));border:1px solid rgba(157,242,42,.15);border-radius:22px;padding:17px;box-shadow:0 18px 38px rgba(0,0,0,.22)} .stat strong{font-size:31px;color:var(--green2);display:block;line-height:1} .stat span{font-size:13px;color:var(--muted);font-weight:800;margin-top:8px;display:block}
 .promo{margin:18px 0;display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px;border-radius:28px;border:1px solid var(--line);background:linear-gradient(90deg,rgba(118,185,0,.24),rgba(16,24,16,.90) 42%,rgba(5,7,5,.96)),radial-gradient(circle at 8% 25%,rgba(157,242,42,.32),transparent 18%);padding:22px;overflow:hidden;position:relative} .promo:before{content:"30%";position:absolute;left:26px;top:-22px;font-size:118px;font-weight:1000;color:rgba(157,242,42,.09)} .promo h2{margin:0 0 7px;font-size:25px} .promo p{margin:0;color:#d7e5d1;line-height:1.8} .promo .refund{display:inline-flex;margin-top:10px;border:1px solid var(--line);color:#dfffce;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:900;background:rgba(118,185,0,.10)}
@@ -91,6 +91,120 @@
 
 @media(max-width:1100px){.quick-grid{grid-template-columns:repeat(3,1fr)}.explorer{grid-template-columns:1fr}.sidebar{position:static;max-height:none}.cards{grid-template-columns:repeat(2,1fr)}.hero-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}.guide-strip{grid-template-columns:1fr}}
 @media(max-width:760px){:root{--navH:0px}.wrap{padding:0 12px}.topbar .wrap{grid-template-columns:auto auto;grid-template-areas:"brand actions" "search search"}.brand{grid-area:brand}.top-search{grid-area:search;max-width:none}.top-actions{grid-area:actions}.top-actions .btn-ghost{display:none}.brand-title strong{font-size:15px}.brand-title span{display:none}.hero{border-radius:26px}.hero-grid{padding:22px 16px}h1,.hero-title{font-size:38px}.hero p{font-size:14px;line-height:1.85}.stats-grid,.quick-grid,.cards,.access-row{grid-template-columns:1fr}.social{grid-template-columns:1fr}.access-card{padding:18px 15px}.promo{grid-template-columns:1fr;padding:18px}.section{border-radius:24px;padding:15px}.section-head{align-items:flex-start}.section-title h2{font-size:22px}.cards.list .bot-body{display:flex}.cards.list .bot-actions{width:auto}.bottom-inner{grid-template-columns:repeat(5,1fr);padding:0 3px}.bottom-item{font-size:10px}.bicon{font-size:18px}.ai-fab{width:78px;height:78px;top:-29px}.code-box{font-size:15px;letter-spacing:1px}}
+
+.hero-grid > div:first-child{
+  max-width:1120px;
+  width:100%;
+}
+.hero-title,
+.hero h1{
+  max-width:980px;
+  margin-top:18px;
+  margin-bottom:18px;
+  font-size:clamp(44px,7vw,88px);
+  line-height:1.02;
+  letter-spacing:-1.6px;
+}
+.hero .eyebrow{
+  font-size:14px;
+}
+.hero p{
+  max-width:1040px;
+  font-size:18px;
+}
+.hero-actions{
+  margin-top:26px;
+}
+@media(max-width:760px){
+  .hero-grid{padding:26px 18px}
+  .hero-title,
+  .hero h1{font-size:42px;letter-spacing:-.8px}
+  .hero p{font-size:15px}
+}
+
+
+.top-access-panel{
+  margin:0 0 18px;
+}
+.top-stats{
+  margin:0 0 14px;
+}
+.top-stats .stat{
+  min-height:92px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.quick-access-tools{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:18px 20px;
+  border:1px solid rgba(157,242,42,.15);
+  border-radius:26px;
+  background:linear-gradient(180deg,rgba(17,25,17,.82),rgba(7,11,7,.94));
+  box-shadow:0 18px 48px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.quick-access-tools h2{
+  margin:0;
+  font-size:24px;
+  color:#f7fff4;
+}
+.quick-access-tools p{
+  margin:6px 0 0;
+  color:var(--muted);
+  line-height:1.7;
+}
+.quick-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  min-width:max-content;
+}
+#explore{
+  margin-top:14px;
+}
+#explore .section-head{
+  align-items:center;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.explorer{
+  grid-template-columns:320px 1fr;
+}
+.sidebar{
+  top:18px;
+}
+.model-list{
+  max-height:620px;
+  overflow:auto;
+  padding-inline-end:4px;
+}
+.results-toolbar{
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:linear-gradient(180deg,rgba(15,22,15,.96),rgba(8,12,8,.92));
+  border:1px solid rgba(157,242,42,.10);
+  border-radius:18px;
+  padding:12px;
+  backdrop-filter:blur(10px);
+}
+@media(max-width:980px){
+  .quick-access-tools{flex-direction:column;align-items:flex-start}
+  .quick-actions{width:100%}
+  .quick-actions .btn{flex:1}
+  .explorer{grid-template-columns:1fr}
+  .sidebar{position:relative;top:auto}
+}
+@media(max-width:760px){
+  .top-stats{grid-template-columns:repeat(2,1fr)}
+  .quick-access-tools{padding:16px;border-radius:22px}
+  .quick-access-tools h2{font-size:20px}
+}
+
 </style>
 
 </head>
@@ -103,34 +217,32 @@
 </header>
 <main id="home" class="page">
   <div class="wrap">
-    <section class="hero" aria-label="ترويسة المنصة">
-      <div class="hero-grid">
+
+    <section class="top-access-panel" aria-label="الوصول السريع للباقة والنماذج والبوتات">
+      <section class="stats-grid top-stats" aria-label="إحصاءات المنصة">
+        <div class="stat"><strong id="statPackages">0</strong><span>باقة رئيسية</span></div>
+        <div class="stat"><strong id="statGroups">0</strong><span>نماذج/تصنيفات</span></div>
+        <div class="stat"><strong id="statBots">0</strong><span>بوتًا وأداة</span></div>
+        <div class="stat"><strong id="statPlatforms">2</strong><span>مسارا وصول: ChatGPT وGemini</span></div>
+      </section>
+      <div class="quick-access-tools">
         <div>
-          <span class="eyebrow">واجهة اكتشاف ذكية لعام 2026</span>
-          <h2 class="hero-title">بوابة النماذج الذكية</h2>
-          <p>أُعيد تنظيم محتوى الباقات والنماذج والبوتات في مسار بسيط: اختر هدفك، ثم الباقة، ثم النموذج، ثم افتح البوت مباشرة عبر ChatGPT أو Gemini دون تشتيت أو بحث طويل.</p>
-          <div class="hero-actions"><a class="btn btn-primary" href="#explore">استكشف النماذج والبوتات</a><button class="btn btn-ghost" id="smartSuggestTop">اقترح لي الأنسب</button></div>
-          <div class="welcome">👋 أهلاً، يسعدنا وجودك معنا</div>
+          <h2>ابدأ من التصنيف، ثم اختر الأداة المناسبة</h2>
+          <p>واجهة مختصرة تضع الباقة والنماذج والبوتات في مسار واحد سريع، مع بحث مباشر وفرز واضح.</p>
         </div>
-        <aside class="start-panel" aria-label="مساعد البداية">
-          <div class="panel-head"><div><h2>لا تعرف من أين تبدأ؟</h2><span>اختر هدفك وسيتم ترتيب النتائج فورًا</span></div><span>⚡</span></div>
-          <div class="journey" id="journeyButtons"></div>
-        </aside>
+        <div class="quick-actions">
+          <button class="btn btn-primary btn-small" data-focus-search>بحث سريع</button>
+          <a class="btn btn-ghost btn-small" href="#explore">استعراض النماذج</a>
+        </div>
       </div>
     </section>
 
-    <section class="stats-grid" aria-label="إحصاءات المنصة">
-      <div class="stat"><strong id="statPackages">0</strong><span>باقة رئيسية</span></div>
-      <div class="stat"><strong id="statGroups">0</strong><span>نماذج/تصنيفات</span></div>
-      <div class="stat"><strong id="statBots">0</strong><span>بوتًا وأداة</span></div>
-      <div class="stat"><strong id="statPlatforms">2</strong><span>مسارا وصول: ChatGPT وGemini</span></div>
-    </section>
 <section class="section" id="explore" aria-label="دليل الاستكشاف الذكي">
-      <div class="section-head"><div class="section-title"><span class="section-icon">🔎</span><div><h2>الدليل الذكي للوصول السريع</h2><p>فلترة وبحث وترتيب مصمم للتعامل مع مئات البوتات دون ازدحام.</p></div></div><div class="section-actions"><button class="btn btn-ghost btn-small" id="resetFilters">إعادة الضبط</button></div></div>
+      <div class="section-head"><div class="section-title"><span class="section-icon">🔎</span><div><h2>دليل الباقة والنماذج والبوتات</h2><p>اختر التصنيف البحثي من اللوحة، أو اكتب كلمة مفتاحية للوصول المباشر إلى الأداة المناسبة.</p></div></div><div class="section-actions"><button class="btn btn-ghost btn-small" id="resetFilters">إعادة الضبط</button></div></div>
       <div class="explorer">
         <aside class="sidebar" aria-label="فلاتر الدليل">
           <h3>لوحة التصفية</h3>
-          <div class="filter-block"><label for="sideSearch">بحث داخل النتائج</label><input class="input" id="sideSearch" type="search" placeholder="مثال: مراجع، صورة، إعلان، قرآن" /></div>
+          <div class="filter-block"><label for="sideSearch">بحث داخل النتائج</label><input class="input" id="sideSearch" type="search" placeholder="مثال: مراجع، فجوة، تلخيص، منهج" /></div>
           <div class="filter-block"><label>النماذج داخل الباقة</label><div class="model-list" id="modelList"></div></div>
         </aside>
         <div class="results-area">
@@ -180,7 +292,7 @@ function packageStats(name){const p=DATA.packages.find(x=>x.name===name);return 
 function setPackage(name){state.package=name;state.group='all';state.page=1;$('packageFilter').value=name;renderPackages();renderModels();renderResults();document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function setJourney(item){state.package=item.pkg;state.group='all';state.query=item.q;state.page=1;$('packageFilter').value=item.pkg;$('globalSearch').value=item.q;$('sideSearch').value=item.q;renderPackages();renderModels();renderResults();document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});toast('تم ترتيب النتائج حسب: '+item.label)}
 function initStats(){$('statPackages').textContent=DATA.summary.packagesCount;$('statGroups').textContent=DATA.summary.groupsCount;$('statBots').textContent=DATA.summary.botsCount}
-function renderJourney(){$('journeyButtons').innerHTML=journey.map((j,i)=>`<button type="button" data-journey="${i}"><span><b>${esc(j.label)}</b><small>${esc(j.small)}</small></span><span>←</span></button>`).join('')}
+function renderJourney(){const holder=$('journeyButtons'); if(!holder) return; holder.innerHTML=journey.map((j,i)=>`<button type="button" data-journey="${i}"><span><b>${esc(j.label)}</b><small>${esc(j.small)}</small></span><span>←</span></button>`).join('')}
 function renderPackageOptions(){const pf=$('packageFilter'); if(pf) pf.innerHTML=DATA.packages.map(p=>`<option value="${esc(p.name)}">${esc(p.name)}</option>`).join('')}
 function renderPackages(){
  const html = DATA.packages.map(p=>`<button type="button" class="package-card ${state.package===p.name?'active':''}" data-pkg="${esc(p.name)}"><span class="pkg-icon">${esc(p.icon)}</span><h3>${esc(p.name)}</h3><div class="micro"><span class="pill green">${p.groups.length} نموذج</span><span class="pill">${p.groups.reduce((a,g)=>a+g.bots.length,0)} بوت</span></div></button>`).join('');
@@ -217,7 +329,7 @@ function renderResults(){
  container.innerHTML=slice.map(botCard).join('');
  renderPagination(pages,total);
 }
-function botCard(b){return `<article class="bot-card"><div class="bot-body"><div class="bot-top"><div><h3 class="bot-title">${esc(b.name)}</h3><div class="bot-meta"><span class="pill green">${esc(b.package)}</span><span class="pill blue">${esc(b.group)}</span></div></div><span class="bot-avatar">${pkgIcon(b.package)}</span></div><p class="bot-summary">${esc(excerpt(b.summary,210))}</p><div class="micro"><span class="pill">نبذة</span><span class="pill">حدود</span><span class="pill">مثال</span><span class="pill green">ChatGPT + Gemini</span></div><div class="bot-actions"><button class="btn btn-primary btn-small details" data-open-bot="${esc(b.id)}">عرض التفاصيل والتشغيل</button><a class="btn btn-ghost btn-small" href="${esc(b.chatgpt||'#')}" target="_blank" rel="noopener">ChatGPT</a><a class="btn btn-ghost btn-small" href="${esc(b.gemini||'#')}" target="_blank" rel="noopener">Gemini</a></div></div></article>`}
+function botCard(b){return `<article class="bot-card"><div class="bot-body"><div class="bot-top"><div><h3 class="bot-title">${esc(b.name)}</h3><div class="bot-meta"><span class="pill green">${esc(b.package)}</span><span class="pill blue">${esc(b.group)}</span></div></div><span class="bot-avatar">${pkgIcon(b.package)}</span></div><p class="bot-summary">${esc(excerpt(b.summary,210))}</p><div class="bot-actions"><button class="btn btn-primary btn-small details" data-open-bot="${esc(b.id)}">عرض التفاصيل والتشغيل</button><a class="btn btn-ghost btn-small" href="${esc(b.chatgpt||'#')}" target="_blank" rel="noopener">ChatGPT</a><a class="btn btn-ghost btn-small" href="${esc(b.gemini||'#')}" target="_blank" rel="noopener">Gemini</a></div></div></article>`}
 function renderPagination(pages,total){
  if(pages<=1){$('pagination').innerHTML='';return;}
  let items=[]; items.push(`<button class="page-btn" data-page="prev">السابق</button>`);
@@ -247,7 +359,7 @@ function bindEvents(){
  $('sideSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=1;$('globalSearch').value=e.target.value;renderResults()});
  document.querySelectorAll('.view-switch button').forEach(btn=>btn.addEventListener('click',()=>{state.view=btn.dataset.view;document.querySelectorAll('.view-switch button').forEach(b=>b.classList.toggle('active',b===btn));renderResults()}));
  const resetBtn=$('resetFilters'); if(resetBtn) resetBtn.addEventListener('click',resetFilters);
- const smartBtn=$('smartSuggestTop'); if(smartBtn) smartBtn.addEventListener('click',()=>{document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});toast('ابدأ بكتابة مهمتك في البحث، أو اختر هدفك من لوحة البداية')});
+ const smartBtn=$('smartSuggestTop'); if(smartBtn) smartBtn.addEventListener('click',()=>{document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});toast('ابدأ بكتابة مهمتك في البحث داخل الدليل الذكي')});
  const aiFabBtn=$('aiFab'); if(aiFabBtn) aiFabBtn.addEventListener('click',()=>{document.querySelector('#home')?.scrollIntoView({behavior:'smooth'});toast('اختر هدفك من مساعد البداية ليتم ترتيب البوتات')});
  $('closeModal').addEventListener('click',()=>$('detailModal').classList.remove('open')); $('detailModal').addEventListener('click',e=>{if(e.target.id==='detailModal')$('detailModal').classList.remove('open')}); document.addEventListener('keydown',e=>{if(e.key==='Escape')$('detailModal').classList.remove('open')});
  document.querySelectorAll('.modal-tabs button').forEach(btn=>btn.addEventListener('click',()=>{state.selectedTab=btn.dataset.tab;renderDetailTab()}));
