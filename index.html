@@ -205,6 +205,105 @@
   .quick-access-tools h2{font-size:20px}
 }
 
+
+.search-filter{
+  position:relative;
+  z-index:25;
+}
+.search-combo{
+  position:relative;
+}
+.search-combo .input{
+  padding-left:42px;
+}
+.clear-search{
+  position:absolute;
+  left:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.055);
+  color:#9df22a;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+  line-height:1;
+  z-index:2;
+}
+.clear-search:hover{
+  background:rgba(118,185,0,.16);
+  border-color:rgba(157,242,42,.35);
+}
+.search-suggestions{
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  left:0;
+  display:none;
+  max-height:340px;
+  overflow:auto;
+  padding:8px;
+  border:1px solid rgba(157,242,42,.22);
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(18,27,18,.98),rgba(6,10,6,.98));
+  box-shadow:0 24px 55px rgba(0,0,0,.42);
+  backdrop-filter:blur(14px);
+  z-index:70;
+}
+.search-suggestions.open{
+  display:grid;
+  gap:7px;
+}
+.suggestion-item{
+  width:100%;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.045);
+  color:#f7fff4;
+  border-radius:14px;
+  padding:10px 11px;
+  text-align:right;
+  display:grid;
+  gap:4px;
+  transition:.16s ease;
+}
+.suggestion-item:hover,
+.suggestion-item:focus{
+  outline:none;
+  border-color:rgba(157,242,42,.42);
+  background:rgba(118,185,0,.14);
+}
+.suggestion-item b{
+  font-size:13px;
+  line-height:1.45;
+}
+.suggestion-item small{
+  color:#a8b4a4;
+  line-height:1.45;
+}
+.suggestion-empty{
+  padding:12px;
+  color:#a8b4a4;
+  text-align:center;
+  border:1px dashed rgba(255,255,255,.10);
+  border-radius:14px;
+}
+.search-hint{
+  margin:8px 0 0;
+  color:#9eab9a;
+  font-size:12px;
+  line-height:1.6;
+}
+@media(max-width:980px){
+  .search-suggestions{
+    position:relative;
+    top:8px;
+    max-height:280px;
+  }
+}
+
 </style>
 
 </head>
@@ -242,7 +341,15 @@
       <div class="explorer">
         <aside class="sidebar" aria-label="فلاتر الدليل">
           <h3>لوحة التصفية</h3>
-          <div class="filter-block"><label for="sideSearch">بحث داخل النتائج</label><input class="input" id="sideSearch" type="search" placeholder="مثال: مراجع، فجوة، تلخيص، منهج" /></div>
+          <div class="filter-block search-filter">
+            <label for="sideSearch">بحث داخل النتائج</label>
+            <div class="search-combo" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-owns="searchSuggestions">
+              <input class="input" id="sideSearch" type="search" placeholder="مثال: مراجع، فجوة، تلخيص، منهج" autocomplete="off" aria-controls="searchSuggestions" aria-autocomplete="list" />
+              <button type="button" class="clear-search" id="clearSearch" aria-label="مسح البحث">×</button>
+              <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="اقتراحات البحث"></div>
+            </div>
+            <p class="search-hint" id="searchHint">اكتب كلمة مفتاحية، وستظهر الاقتراحات المطابقة أسفل مربع البحث.</p>
+          </div>
           <div class="filter-block"><label>النماذج داخل الباقة</label><div class="model-list" id="modelList"></div></div>
         </aside>
         <div class="results-area">
@@ -318,6 +425,41 @@ function getFiltered(){
  if(state.sort==='package') arr=[...arr].sort((a,b)=>(a.package+a.group+a.name).localeCompare(b.package+b.group+b.name,'ar'));
  return arr;
 }
+function getSearchSuggestionPool(q){
+ let arr = DATA.bots.filter(b=> state.package==='all' || b.package===state.package);
+ if(state.group!=='all') arr=arr.filter(b=>b.group===state.group);
+ if(state.platform==='chatgpt') arr=arr.filter(b=>!!b.chatgpt);
+ if(state.platform==='gemini') arr=arr.filter(b=>!!b.gemini);
+ if(state.platform==='both') arr=arr.filter(b=>!!b.chatgpt && !!b.gemini);
+ if(q) arr=arr.filter(b=>botMatchesQuery(b,q));
+ return arr.slice(0,10);
+}
+function closeSearchSuggestions(){
+ const box=$('searchSuggestions'); const combo=document.querySelector('.search-combo');
+ if(box) box.classList.remove('open');
+ if(combo){combo.classList.remove('open'); combo.setAttribute('aria-expanded','false');}
+}
+function renderSearchSuggestions(q=state.query){
+ const box=$('searchSuggestions'); const combo=document.querySelector('.search-combo'); const hint=$('searchHint');
+ if(!box || !combo) return;
+ const value=String(q||'').trim();
+ if(!value){
+   box.innerHTML='';
+   closeSearchSuggestions();
+   if(hint) hint.textContent='اكتب كلمة مفتاحية، وستظهر الاقتراحات المطابقة أسفل مربع البحث.';
+   return;
+ }
+ const suggestions=getSearchSuggestionPool(value);
+ if(hint) hint.textContent=`${suggestions.length} اقتراحات مطابقة للبحث: ${value}`;
+ if(!suggestions.length){
+   box.innerHTML='<div class="suggestion-empty">لا توجد اقتراحات مطابقة. جرّب كلمة أقصر أو تصنيفًا آخر.</div>';
+ }else{
+   box.innerHTML=suggestions.map(b=>`<button type="button" class="suggestion-item" role="option" data-suggest-id="${esc(b.id)}"><b>${esc(b.name)}</b><small>${esc(b.group)} · ${esc(b.package)}</small></button>`).join('');
+ }
+ box.classList.add('open');
+ combo.classList.add('open');
+ combo.setAttribute('aria-expanded','true');
+}
 function renderResults(){
  const filtered=getFiltered();
  const total=filtered.length; const pages=Math.max(1,Math.ceil(total/state.perPage)); if(state.page>pages)state.page=pages;
@@ -328,6 +470,7 @@ function renderResults(){
  if(!slice.length){container.innerHTML='<div class="empty">لا توجد نتائج مطابقة. جرّب كلمة أبسط أو اختر نموذجًا آخر.</div>';$('pagination').innerHTML='';return;}
  container.innerHTML=slice.map(botCard).join('');
  renderPagination(pages,total);
+ if(state.query) renderSearchSuggestions(state.query);
 }
 function botCard(b){return `<article class="bot-card"><div class="bot-body"><div class="bot-top"><div><h3 class="bot-title">${esc(b.name)}</h3><div class="bot-meta"><span class="pill green">${esc(b.package)}</span><span class="pill blue">${esc(b.group)}</span></div></div><span class="bot-avatar">${pkgIcon(b.package)}</span></div><p class="bot-summary">${esc(excerpt(b.summary,210))}</p><div class="bot-actions"><button class="btn btn-primary btn-small details" data-open-bot="${esc(b.id)}">عرض التفاصيل والتشغيل</button><a class="btn btn-ghost btn-small" href="${esc(b.chatgpt||'#')}" target="_blank" rel="noopener">ChatGPT</a><a class="btn btn-ghost btn-small" href="${esc(b.gemini||'#')}" target="_blank" rel="noopener">Gemini</a></div></div></article>`}
 function renderPagination(pages,total){
@@ -341,22 +484,26 @@ function renderPagination(pages,total){
 }
 function openBot(id){const b=DATA.bots.find(x=>x.id===id);if(!b)return;state.selectedBot=b;state.selectedTab='summary';$('modalTitle').textContent=b.name;$('modalMeta').textContent=b.package+' / '+b.group;$('modalChatgpt').href=b.chatgpt||'#';$('modalGemini').href=b.gemini||'#';renderDetailTab();$('detailModal').classList.add('open')}
 function renderDetailTab(){const b=state.selectedBot;if(!b)return;document.querySelectorAll('.modal-tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab===state.selectedTab));const val=b[state.selectedTab]||'لا توجد بيانات كافية لهذا القسم.';$('detailText').textContent=val}
-function resetFilters(){state.package='باقة الباحث';state.group='all';state.query='';state.platform='all';state.sort='default';state.page=1;$('globalSearch').value='';$('sideSearch').value='';$('packageFilter').value='باقة الباحث';$('platformFilter').value='all';$('sortSelect').value='default';renderPackages();renderModels();renderResults();toast('تمت إعادة ضبط الدليل')}
+function resetFilters(){state.package='باقة الباحث';state.group='all';state.query='';state.platform='all';state.sort='default';state.page=1;$('globalSearch').value='';$('sideSearch').value='';$('packageFilter').value='باقة الباحث';$('platformFilter').value='all';$('sortSelect').value='default';closeSearchSuggestions();renderPackages();renderModels();renderResults();toast('تمت إعادة ضبط الدليل')}
 function bindEvents(){
  document.addEventListener('click',e=>{
    const pkg=e.target.closest('[data-pkg]'); if(pkg){setPackage(pkg.dataset.pkg);return;}
    const j=e.target.closest('[data-journey]'); if(j){setJourney(journey[+j.dataset.journey]);return;}
    const m=e.target.closest('[data-group]'); if(m){state.group=m.dataset.group;state.page=1;renderModels();renderResults();return;}
+   const sug=e.target.closest('[data-suggest-id]'); if(sug){const b=DATA.bots.find(x=>x.id===sug.dataset.suggestId); if(b){state.query=b.name;state.page=1;$('sideSearch').value=b.name;$('globalSearch').value=b.name;renderResults();closeSearchSuggestions();}return;}
    const ob=e.target.closest('[data-open-bot]'); if(ob){openBot(ob.dataset.openBot);return;}
    const p=e.target.closest('[data-page]'); if(p){const pages=Math.max(1,Math.ceil(getFiltered().length/state.perPage));if(p.dataset.page==='prev')state.page=Math.max(1,state.page-1);else if(p.dataset.page==='next')state.page=Math.min(pages,state.page+1);else state.page=+p.dataset.page;renderResults();document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});return;}
    const scroll=e.target.closest('[data-scrollto]'); if(scroll){document.querySelector(scroll.dataset.scrollto)?.scrollIntoView({behavior:'smooth',block:'start'});return;}
-   if(e.target.closest('[data-focus-search]')){$('globalSearch').focus();document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});return;}
+   if(e.target.closest('[data-focus-search]')){document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>{$('sideSearch')?.focus();renderSearchSuggestions(state.query)},260);return;}
+    if(!e.target.closest('.search-combo')) closeSearchSuggestions();
  });
  $('packageFilter').addEventListener('change',e=>setPackage(e.target.value));
  $('platformFilter').addEventListener('change',e=>{state.platform=e.target.value;state.page=1;renderResults()});
  $('sortSelect').addEventListener('change',e=>{state.sort=e.target.value;state.page=1;renderResults()});
- $('globalSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=1;$('sideSearch').value=e.target.value;renderResults()});
- $('sideSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=1;$('globalSearch').value=e.target.value;renderResults()});
+ $('globalSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=1;$('sideSearch').value=e.target.value;renderResults();renderSearchSuggestions(state.query)});
+ $('sideSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=1;$('globalSearch').value=e.target.value;renderResults();renderSearchSuggestions(state.query)});
+ $('sideSearch').addEventListener('focus',()=>renderSearchSuggestions(state.query));
+ const clearSearchBtn=$('clearSearch'); if(clearSearchBtn) clearSearchBtn.addEventListener('click',()=>{state.query='';state.page=1;$('sideSearch').value='';$('globalSearch').value='';closeSearchSuggestions();renderResults();$('sideSearch').focus();});
  document.querySelectorAll('.view-switch button').forEach(btn=>btn.addEventListener('click',()=>{state.view=btn.dataset.view;document.querySelectorAll('.view-switch button').forEach(b=>b.classList.toggle('active',b===btn));renderResults()}));
  const resetBtn=$('resetFilters'); if(resetBtn) resetBtn.addEventListener('click',resetFilters);
  const smartBtn=$('smartSuggestTop'); if(smartBtn) smartBtn.addEventListener('click',()=>{document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});toast('ابدأ بكتابة مهمتك في البحث داخل الدليل الذكي')});
