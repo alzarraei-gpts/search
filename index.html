@@ -304,6 +304,68 @@
   }
 }
 
+
+#sideSearch{
+  -webkit-appearance:none;
+  appearance:none;
+}
+#sideSearch::-webkit-search-decoration,
+#sideSearch::-webkit-search-cancel-button,
+#sideSearch::-webkit-search-results-button,
+#sideSearch::-webkit-search-results-decoration{
+  display:none;
+}
+.search-combo .input{
+  min-height:48px;
+  padding-left:58px !important;
+  padding-right:14px;
+}
+.clear-search{
+  left:12px !important;
+  width:32px !important;
+  height:32px !important;
+  min-width:32px;
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+  z-index:120 !important;
+  background:rgba(118,185,0,.16) !important;
+  color:#9df22a !important;
+  border-color:rgba(157,242,42,.34) !important;
+  box-shadow:0 0 0 4px rgba(118,185,0,.08);
+}
+.clear-search:active{
+  transform:translateY(-50%) scale(.94);
+}
+.search-suggestions{
+  scroll-behavior:smooth;
+}
+.suggestion-item mark{
+  background:rgba(157,242,42,.18);
+  color:#dfffca;
+  border-radius:6px;
+  padding:0 2px;
+}
+@media(max-width:760px){
+  .search-combo .input{
+    min-height:52px;
+    padding-left:62px !important;
+    font-size:16px;
+  }
+  .clear-search{
+    left:12px !important;
+    width:34px !important;
+    height:34px !important;
+    font-size:21px !important;
+  }
+  .search-suggestions{
+    position:relative !important;
+    top:8px !important;
+    max-height:360px !important;
+    z-index:150 !important;
+  }
+}
+
 </style>
 
 </head>
@@ -344,7 +406,7 @@
           <div class="filter-block search-filter">
             <label for="sideSearch">بحث داخل النتائج</label>
             <div class="search-combo" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-owns="searchSuggestions">
-              <input class="input" id="sideSearch" type="search" placeholder="مثال: مراجع، فجوة، تلخيص، منهج" autocomplete="off" aria-controls="searchSuggestions" aria-autocomplete="list" />
+              <input class="input" id="sideSearch" type="text" placeholder="مثال: مراجع، فجوة، تلخيص، منهج" autocomplete="off" aria-controls="searchSuggestions" aria-autocomplete="list" />
               <button type="button" class="clear-search" id="clearSearch" aria-label="مسح البحث">×</button>
               <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="اقتراحات البحث"></div>
             </div>
@@ -413,26 +475,62 @@ function renderModels(){
  const allActive = state.group==='all'?'active':'';
  $('modelList').innerHTML = `<button class="model-chip ${allActive}" data-group="all"><span>كل النماذج</span><small>${groups.reduce((a,g)=>a+g.bots.length,0)}</small></button>` + groups.map(g=>`<button class="model-chip ${state.group===g.name?'active':''}" data-group="${esc(g.name)}"><span>${esc(g.name)}</span><small>${g.bots.length}</small></button>`).join('');
 }
-function botMatchesQuery(bot,q){if(!q)return true;const hay=norm([bot.name,bot.package,bot.group,bot.summary,bot.limits,bot.example].join(' '));return norm(q).split(/\s+/).filter(Boolean).every(t=>hay.includes(t))}
-function getFiltered(){
+function splitTerms(q){return norm(q).split(/\s+/).filter(Boolean)}
+function botSearchText(bot){return norm([bot.name,bot.package,bot.group,bot.summary,bot.limits,bot.example].join(' '))}
+function wordStartsWith(text,term){return String(text||'').split(/\s+/).some(w=>w.startsWith(term))}
+function botMatchesQuery(bot,q){
+ const terms=splitTerms(q); if(!terms.length)return true;
+ const hay=botSearchText(bot);
+ return terms.every(t=>hay.includes(t) || wordStartsWith(norm(bot.name),t) || wordStartsWith(norm(bot.group),t));
+}
+function botSearchScore(bot,q){
+ const terms=splitTerms(q); if(!terms.length)return 999;
+ const nq=norm(q), name=norm(bot.name), group=norm(bot.group), summary=norm(bot.summary);
+ let score=0;
+ for(const t of terms){
+   let part=80;
+   if(name===t || name===nq) part=0;
+   else if(name.startsWith(t) || name.startsWith(nq)) part=1;
+   else if(wordStartsWith(name,t)) part=2;
+   else if(group.startsWith(t) || group.startsWith(nq)) part=3;
+   else if(name.includes(t)) part=4;
+   else if(group.includes(t)) part=5;
+   else if(summary.includes(t)) part=7;
+   else part=50;
+   score+=part;
+ }
+ score += Math.min(name.length,120)/1000;
+ return score;
+}
+function baseFiltered(ignoreQuery=false){
  let arr = DATA.bots.filter(b=> state.package==='all' || b.package===state.package);
  if(state.group!=='all') arr=arr.filter(b=>b.group===state.group);
  if(state.platform==='chatgpt') arr=arr.filter(b=>!!b.chatgpt);
  if(state.platform==='gemini') arr=arr.filter(b=>!!b.gemini);
  if(state.platform==='both') arr=arr.filter(b=>!!b.chatgpt && !!b.gemini);
- if(state.query) arr=arr.filter(b=>botMatchesQuery(b,state.query));
+ if(!ignoreQuery && state.query) arr=arr.filter(b=>botMatchesQuery(b,state.query));
+ return arr;
+}
+function getFiltered(){
+ let arr = baseFiltered(false);
+ if(state.query && state.sort==='default') arr=[...arr].sort((a,b)=>botSearchScore(a,state.query)-botSearchScore(b,state.query));
  if(state.sort==='name') arr=[...arr].sort((a,b)=>a.name.localeCompare(b.name,'ar'));
  if(state.sort==='package') arr=[...arr].sort((a,b)=>(a.package+a.group+a.name).localeCompare(b.package+b.group+b.name,'ar'));
  return arr;
 }
 function getSearchSuggestionPool(q){
- let arr = DATA.bots.filter(b=> state.package==='all' || b.package===state.package);
- if(state.group!=='all') arr=arr.filter(b=>b.group===state.group);
- if(state.platform==='chatgpt') arr=arr.filter(b=>!!b.chatgpt);
- if(state.platform==='gemini') arr=arr.filter(b=>!!b.gemini);
- if(state.platform==='both') arr=arr.filter(b=>!!b.chatgpt && !!b.gemini);
- if(q) arr=arr.filter(b=>botMatchesQuery(b,q));
- return arr.slice(0,10);
+ let arr = baseFiltered(true);
+ if(q) arr=arr.filter(b=>botMatchesQuery(b,q)).sort((a,b)=>botSearchScore(a,q)-botSearchScore(b,q));
+ return arr.slice(0,12);
+}
+function highlightMatch(text,q){
+ const terms=splitTerms(q); let out=esc(text);
+ terms.slice(0,3).forEach(t=>{
+   if(!t)return;
+   const safe=t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+   out=out.replace(new RegExp(`(${safe})`,'ig'),'<mark>$1</mark>');
+ });
+ return out;
 }
 function closeSearchSuggestions(){
  const box=$('searchSuggestions'); const combo=document.querySelector('.search-combo');
@@ -454,7 +552,7 @@ function renderSearchSuggestions(q=state.query){
  if(!suggestions.length){
    box.innerHTML='<div class="suggestion-empty">لا توجد اقتراحات مطابقة. جرّب كلمة أقصر أو تصنيفًا آخر.</div>';
  }else{
-   box.innerHTML=suggestions.map(b=>`<button type="button" class="suggestion-item" role="option" data-suggest-id="${esc(b.id)}"><b>${esc(b.name)}</b><small>${esc(b.group)} · ${esc(b.package)}</small></button>`).join('');
+   box.innerHTML=suggestions.map(b=>`<button type="button" class="suggestion-item" role="option" data-suggest-id="${esc(b.id)}"><b>${highlightMatch(b.name,value)}</b><small>${esc(b.group)} · ${esc(b.package)}</small></button>`).join('');
  }
  box.classList.add('open');
  combo.classList.add('open');
@@ -503,7 +601,7 @@ function bindEvents(){
  $('globalSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=1;$('sideSearch').value=e.target.value;renderResults();renderSearchSuggestions(state.query)});
  $('sideSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=1;$('globalSearch').value=e.target.value;renderResults();renderSearchSuggestions(state.query)});
  $('sideSearch').addEventListener('focus',()=>renderSearchSuggestions(state.query));
- const clearSearchBtn=$('clearSearch'); if(clearSearchBtn) clearSearchBtn.addEventListener('click',()=>{state.query='';state.page=1;$('sideSearch').value='';$('globalSearch').value='';closeSearchSuggestions();renderResults();$('sideSearch').focus();});
+ const clearSearchBtn=$('clearSearch'); if(clearSearchBtn) clearSearchBtn.addEventListener('click',(e)=>{e.preventDefault();state.query='';state.page=1;$('sideSearch').value='';$('globalSearch').value='';closeSearchSuggestions();renderResults();setTimeout(()=>$('sideSearch').focus(),0);});
  document.querySelectorAll('.view-switch button').forEach(btn=>btn.addEventListener('click',()=>{state.view=btn.dataset.view;document.querySelectorAll('.view-switch button').forEach(b=>b.classList.toggle('active',b===btn));renderResults()}));
  const resetBtn=$('resetFilters'); if(resetBtn) resetBtn.addEventListener('click',resetFilters);
  const smartBtn=$('smartSuggestTop'); if(smartBtn) smartBtn.addEventListener('click',()=>{document.querySelector('#explore')?.scrollIntoView({behavior:'smooth',block:'start'});toast('ابدأ بكتابة مهمتك في البحث داخل الدليل الذكي')});
