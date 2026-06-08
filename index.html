@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>باقة الباحث | واجهة نيون هولوغرافية</title>
+<title>باقة الباحث</title>
 <meta name="description" content="واجهة نيون هولوغرافية لعرض نماذج باقة الباحث مع تصفية وبحث وروابط تشغيل مباشرة." />
 <meta property="og:title" content="باقة الباحث" />
 <meta property="og:description" content="نماذج وأدوات بحثية لدعم الباحث العربي في الإعداد، والتحليل، والتوثيق، والتحرير الأكاديمي." />
@@ -58,16 +58,46 @@
 .workspace{
   align-items:start !important;
 }
+
 .filter-panel{
   align-self:start !important;
   overflow:visible !important;
 }
+
 .category-list{
   max-height:none !important;
   overflow:visible !important;
   padding-left:0 !important;
 }
 
+/* تعديل: إظهار نصوص قائمة الترتيب دائمًا دون الحاجة إلى تمرير الماوس */
+#sortSelect,
+#sortSelect option,
+select.btn,
+select.btn option{
+  color:#f4fff1 !important;
+  background:#101910 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+#sortSelect option{
+  color:#f4fff1 !important;
+  background:#101910 !important;
+}
+
+#sortSelect option:checked,
+#sortSelect option:hover,
+#sortSelect option:focus{
+  color:#ffffff !important;
+  background:#234400 !important;
+}
+
+#sortSelect:focus{
+  color:#ffffff !important;
+  border-color:rgba(149,242,29,.65) !important;
+  box-shadow:0 0 0 5px rgba(149,242,29,.12) !important;
+}
 </style>
 </head>
 <body>
@@ -85,7 +115,7 @@
   <article class="stat-card"><div class="holo-icon small" data-icon="tools"></div><strong id="toolCountStat">55</strong><span>بوت ونموذج</span></article>
   <article class="stat-card"><div class="holo-icon small cyan" data-icon="layers"></div><strong id="categoryCountStat">15</strong><span>تصنيفًا بحثيًا</span></article>
   <article class="stat-card"><div class="holo-icon small" data-icon="star"></div><strong>1</strong><span>باقة رئيسية</span></article>
-  <article class="intro-card glass"><div class="holo-icon cyan" data-icon="compass" aria-hidden="true"></div><div class="intro-copy"><span class="badge">مسار بحثي متخصص</span><h2>اختر النموذج المناسب</h2><p>واجهة نيون هولوغرافية تجمع نماذج باقة الباحث في مركز واحد مع بحث مباشر وتصفية حسب المرحلة والمنهج والوظيفة.</p></div></article>
+  <article class="intro-card glass"><div class="holo-icon cyan" data-icon="compass" aria-hidden="true"></div><div class="intro-copy"><span class="badge">مسار بحثي متخصص</span><h2>اختر النموذج المناسب</h2></div></article>
 </section>
 <section id="tools" class="tool-center glass glow-edge" aria-label="مركز النماذج">
   <div class="center-head"><button class="btn ghost" id="resetBtn" type="button"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></svg><span>إعادة الضبط</span></button><div class="center-title"><div class="holo-icon small cyan" data-icon="search"></div><div><h2>مركز النماذج</h2><p>ابحث، صفِّ، ثم افتح نموذج باقة الباحث مباشرة عبر ChatGPT أو Gemini.</p></div></div><button class="btn pill" id="motionBtn" type="button"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7-11-7Z"/></svg><span>إيقاف الحركة</span></button></div>
