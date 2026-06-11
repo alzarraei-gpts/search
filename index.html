@@ -100,6 +100,201 @@ select.btn option{
 }
 </style>
 </head>
+  <!-- تعديلات نهائية: باقة الباحث + البحث الجزئي + ترتيب الأزرار + كشف التصنيفات + إعادة تسمية نموذجين -->
+<style>
+  /* إظهار قائمة التصنيفات كاملة دون سلايدر داخلي */
+  .filter-panel,
+  .workspace,
+  .tool-center{
+    overflow:visible !important;
+  }
+
+  .category-list{
+    max-height:none !important;
+    height:auto !important;
+    overflow:visible !important;
+    padding-left:0 !important;
+    scrollbar-width:none !important;
+  }
+
+  .category-list::-webkit-scrollbar{
+    display:none !important;
+  }
+
+  .filter-panel{
+    align-self:start !important;
+    height:auto !important;
+    max-height:none !important;
+  }
+
+  .category-btn{
+    width:100% !important;
+  }
+
+  /* جعل أزرار المنصات متبادلة: ChatGPT يمينًا وGemini يسارًا */
+  .card-actions,
+  .modal-foot div{
+    direction:rtl !important;
+  }
+
+  .card-actions a[href*="chatgpt.com"],
+  .modal-foot a[href*="chatgpt.com"]{
+    order:1 !important;
+  }
+
+  .card-actions a[href*="gemini.google.com"],
+  .modal-foot a[href*="gemini.google.com"]{
+    order:2 !important;
+  }
+
+  @media(max-width:820px){
+    .category-list{
+      max-height:none !important;
+      overflow:visible !important;
+    }
+  }
+</style>
+
+<script>
+(function(){
+  /* تغيير عنوان الصفحة والرأس */
+  document.title = "باقة الباحث";
+
+  const mastheadTitle = document.querySelector(".masthead-title");
+  if (mastheadTitle) {
+    mastheadTitle.textContent = "باقة الباحث";
+  }
+
+  /* تطبيع العربية للبحث المرن */
+  function normalizeArabic(text){
+    return String(text || "")
+      .toLowerCase()
+      .replace(/[أإآٱ]/g, "ا")
+      .replace(/ؤ/g, "و")
+      .replace(/ئ/g, "ي")
+      .replace(/ى/g, "ي")
+      .replace(/ة/g, "ه")
+      .replace(/ـ/g, "")
+      .replace(/[\u064B-\u065F\u0670]/g, "")
+      .replace(/[^\u0600-\u06FFa-z0-9\s]/gi, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  /* إعادة تسمية النموذجين المطلوبين */
+  if (typeof tools !== "undefined" && Array.isArray(tools)) {
+    tools.forEach(t => {
+      const oldTitle = String(t.title || "").trim();
+
+      if (oldTitle === "التوثيق المرجعي الإحالي للملفات") {
+        t.title = "التوثيق المرجعي الإحالي للملفات";
+        t.sourceTitle = "التوثيق المرجعي الإحالي للملفات";
+      }
+
+      if (oldTitle === "التوثيق المرجعي الإحالي للروابط") {
+        t.title = "التوثيق المرجعي الإحالي للروابط";
+        t.sourceTitle = "التوثيق المرجعي الإحالي للروابط";
+      }
+
+      /* حقل بحث موسّع يشمل العنوان، الوصف، الحدود، المثال، المنصات، والمرادفات */
+      t._searchText = normalizeArabic([
+        t.title,
+        t.sourceTitle,
+        t.desc,
+        t.summary,
+        t.limits,
+        t.example,
+        t.cat,
+        "chatgpt تشات تشات جي بي تي جيميناي gemini تشغيل رابط روابط ملفات ملف توثيق مرجعي احالي إحالي"
+      ].join(" "));
+    });
+  }
+
+  /* تحسين البحث: يقبل التهجئة الجزئية وبداية الكلمة وجزء الكلمة */
+  if (typeof filtered === "function" && typeof tools !== "undefined" && Array.isArray(tools)) {
+    filtered = function(){
+      const input = document.getElementById("searchInput");
+      const sort = document.getElementById("sortSelect");
+      const q = normalizeArabic(input ? input.value : "");
+
+      let list = tools.filter(t => {
+        return typeof state === "undefined" || state.category === "all" || t.cat === state.category;
+      });
+
+      if (q) {
+        const parts = q.split(" ").filter(Boolean);
+
+        list = list.filter(t => {
+          const text = t._searchText || normalizeArabic([
+            t.title,
+            t.sourceTitle,
+            t.desc,
+            t.summary,
+            t.limits,
+            t.example,
+            t.cat
+          ].join(" "));
+
+          const words = text.split(" ");
+
+          return parts.every(part =>
+            text.includes(part) ||
+            words.some(word => word.startsWith(part) || word.includes(part))
+          );
+        });
+      }
+
+      if (sort && sort.value === "name") {
+        list = [...list].sort((a,b)=>String(a.title).localeCompare(String(b.title), "ar"));
+      }
+
+      if (sort && sort.value === "category" && typeof categoryName === "function") {
+        list = [...list].sort((a,b)=>categoryName(a.cat).localeCompare(categoryName(b.cat), "ar"));
+      }
+
+      return list;
+    };
+  }
+
+  /* إعادة ترتيب أزرار كل بطاقة بعد كل عملية عرض */
+  if (typeof renderCards === "function") {
+    const oldRenderCards = renderCards;
+
+    renderCards = function(){
+      oldRenderCards();
+
+      document.querySelectorAll(".card-actions").forEach(actions => {
+        const chat = actions.querySelector('a[href*="chatgpt.com"]');
+        const gemini = actions.querySelector('a[href*="gemini.google.com"]');
+
+        if (chat && gemini) {
+          actions.appendChild(chat);
+          actions.appendChild(gemini);
+        }
+      });
+    };
+  }
+
+  /* تحديث النصوص الظاهرة في شريط النتائج */
+  document.querySelectorAll(".toolbar strong").forEach(el => {
+    el.innerHTML = el.innerHTML
+      .replaceAll("باقة البحث العلمي", "باقة الباحث")
+      .replaceAll("باقة الباحث العلمي", "باقة الباحث");
+  });
+
+  /* تحديث نصوص أخرى محتملة في الصفحة */
+  document.body.innerHTML = document.body.innerHTML
+    .replaceAll("باقة البحث العلمي", "باقة الباحث")
+    .replaceAll("باقة الباحث العلمي", "باقة الباحث");
+
+  /* إعادة العرض بعد تطبيق التعديلات */
+  if (typeof render === "function") {
+    render();
+  } else if (typeof renderCards === "function") {
+    renderCards();
+  }
+})();
+</script>
 <body>
 <canvas id="particles" aria-hidden="true"></canvas>
 <header id="top" class="masthead glass glow-edge" aria-label="رأس الواجهة">
